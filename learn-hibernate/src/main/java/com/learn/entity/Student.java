@@ -1,5 +1,6 @@
 package com.learn.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.learn.entity.nested.Address;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,6 +18,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,7 +26,7 @@ import javax.validation.constraints.NotNull;
 @Setter
 @ToString
 @Entity(name = "student_details")
-public class Student {
+public class Student implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -46,7 +48,8 @@ public class Student {
     @Embedded
     private Address address;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "teacher_id")
+    @JsonBackReference      // This annotation at field level will remove this field from response.
     private Teacher teacher;
 }

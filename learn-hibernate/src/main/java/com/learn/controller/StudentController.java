@@ -68,7 +68,7 @@ public class StudentController {
     }
 
     @DeleteMapping("/{id}/delete")
-    public ResponseEntity delete(@PathVariable (required = true, name = "id") long id){
+    public ResponseEntity delete(@PathVariable (required = true, name = "id") long id) {
 
         ResponseEntity entity = null;
         boolean status = studentService.delete(id);

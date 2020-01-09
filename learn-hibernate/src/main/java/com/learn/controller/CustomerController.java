@@ -1,7 +1,7 @@
 package com.learn.controller;
 
-import com.learn.entity.Teacher;
-import com.learn.service.TeacherService;
+import com.learn.entity.Customer;
+import com.learn.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,33 +16,33 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/teacher")
-public class TeacherController {
+@RequestMapping("/consumer")
+public class CustomerController {
 
     @Autowired
-    TeacherService teacherService;
+    CustomerService customerService;
 
     @GetMapping("/{id}/get")
-    public ResponseEntity get(@PathVariable (required = true,name = "id") long id){
+    public ResponseEntity get(@PathVariable (required = true, name = "id") long id){
 
-        Optional<Teacher> teacher = teacherService.get(id);
-        ResponseEntity entity;
-        if(teacher.isPresent()){
-            entity = new ResponseEntity(teacher.get(), HttpStatus.OK);
-        } else{
+        ResponseEntity entity = null;
+        Optional<Customer> customerOp = customerService.getById(id);
+        if(customerOp.isPresent()){
+            entity = new ResponseEntity(customerOp.get(), HttpStatus.OK);
+        } else {
             entity = new ResponseEntity(HttpStatus.NO_CONTENT);
         }
         return entity;
     }
 
     @PostMapping("/save")
-    public ResponseEntity save(@RequestBody Teacher teacher) {
+    public ResponseEntity save(@RequestBody Customer customer) {
         ResponseEntity entity;
 
-        Teacher savedTeacher = teacherService.save(teacher);
+        Customer savedCustomer = customerService.save(customer);
 
-        if(savedTeacher != null){
-            entity = new ResponseEntity("Id :- " + savedTeacher.getId(),HttpStatus.OK);
+        if(savedCustomer != null){
+            entity = new ResponseEntity("Id :- " + savedCustomer.getId(),HttpStatus.OK);
         } else {
             entity = new ResponseEntity(HttpStatus.NO_CONTENT);
         }
@@ -54,14 +54,14 @@ public class TeacherController {
     public ResponseEntity save(@PathVariable (required = true, name = "id") long id) {
         ResponseEntity entity;
 
-        boolean status = teacherService.delete(id);
+        boolean status = customerService.delete(id);
 
         if(status){
             entity = new ResponseEntity(HttpStatus.OK);
         } else {
             entity = new ResponseEntity(HttpStatus.NO_CONTENT);
         }
-
         return entity;
     }
+
 }

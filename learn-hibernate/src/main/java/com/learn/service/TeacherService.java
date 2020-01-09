@@ -13,11 +13,19 @@ public class TeacherService {
     @Autowired
     TeacherRepo teacherRepo;
 
+    @Autowired
+    StudentService studentService;
+
     public Optional<Teacher> get(long id) {
         return teacherRepo.findById(id);
     }
 
     public Teacher save(Teacher teacher) {
         return teacherRepo.save(teacher);
+    }
+
+    public boolean delete(long id) {
+        teacherRepo.deleteById(id);
+        return get(id).isPresent();
     }
 }

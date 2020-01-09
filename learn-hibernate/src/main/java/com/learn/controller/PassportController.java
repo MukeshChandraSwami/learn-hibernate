@@ -1,7 +1,8 @@
 package com.learn.controller;
 
-import com.learn.entity.Teacher;
-import com.learn.service.TeacherService;
+import com.learn.entity.Customer;
+import com.learn.entity.Passport;
+import com.learn.service.PassportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,33 +17,33 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/teacher")
-public class TeacherController {
+@RequestMapping("/passport")
+public class PassportController {
 
     @Autowired
-    TeacherService teacherService;
+    PassportService passportService;
 
     @GetMapping("/{id}/get")
-    public ResponseEntity get(@PathVariable (required = true,name = "id") long id){
+    public ResponseEntity get(@PathVariable (required = true, name = "id") long id){
 
-        Optional<Teacher> teacher = teacherService.get(id);
-        ResponseEntity entity;
-        if(teacher.isPresent()){
-            entity = new ResponseEntity(teacher.get(), HttpStatus.OK);
-        } else{
+        ResponseEntity entity = null;
+        Optional<Passport> passportOp = passportService.get(id);
+        if(passportOp.isPresent()){
+            entity = new ResponseEntity(passportOp.get(), HttpStatus.OK);
+        } else {
             entity = new ResponseEntity(HttpStatus.NO_CONTENT);
         }
         return entity;
     }
 
     @PostMapping("/save")
-    public ResponseEntity save(@RequestBody Teacher teacher) {
+    public ResponseEntity save(@RequestBody Passport passport) {
         ResponseEntity entity;
 
-        Teacher savedTeacher = teacherService.save(teacher);
+        Passport savedPassport = passportService.save(passport);
 
-        if(savedTeacher != null){
-            entity = new ResponseEntity("Id :- " + savedTeacher.getId(),HttpStatus.OK);
+        if(savedPassport != null){
+            entity = new ResponseEntity("Id :- " + savedPassport.getId(), HttpStatus.OK);
         } else {
             entity = new ResponseEntity(HttpStatus.NO_CONTENT);
         }
@@ -51,17 +52,16 @@ public class TeacherController {
     }
 
     @DeleteMapping("/{id}/delete")
-    public ResponseEntity save(@PathVariable (required = true, name = "id") long id) {
+    public ResponseEntity save(@PathVariable(required = true, name = "id") long id) {
         ResponseEntity entity;
 
-        boolean status = teacherService.delete(id);
+        boolean status = passportService.delete(id);
 
         if(status){
             entity = new ResponseEntity(HttpStatus.OK);
         } else {
             entity = new ResponseEntity(HttpStatus.NO_CONTENT);
         }
-
         return entity;
     }
 }
