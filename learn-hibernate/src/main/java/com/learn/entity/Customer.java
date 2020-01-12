@@ -11,7 +11,9 @@ import lombok.Setter;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -21,6 +23,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Getter
 @Setter
@@ -40,10 +43,16 @@ public class Customer {
     @Column(name = "customer_name",nullable = false)
     private String name;
 
-    /*@Enumerated(value = EnumType.STRING)
+    @Enumerated(value = EnumType.STRING)
     @Column(name = "customer_type", nullable = false)
-    @Type(type = "com.learn.enums.CustomerType")
-    private CustomerType customerType;*/
+    //@Type(type = "com.learn.enums.CustomerType")
+    private CustomerType customerType;
+
+    @ElementCollection
+    @CollectionTable(name = "customer_hobbies_details"/*,joinColumns = @JoinColumn(name = "customer_id")*/)
+    @JoinColumn(name = "customer_id")
+    @Column(name = "customer_hobie")
+    private List<String> hobbies;
 
     @NotNull
     @OneToOne(cascade = CascadeType.ALL)

@@ -35,11 +35,12 @@ public class CustomerController {
         return entity;
     }
 
-    @PostMapping("/save")
-    public ResponseEntity save(@RequestBody Customer customer) {
+    @PostMapping("/{jpa}/save")
+    public ResponseEntity save(@RequestBody Customer customer,
+                               @PathVariable (required = false, name = "jpa") boolean jpa) {
         ResponseEntity entity;
 
-        Customer savedCustomer = customerService.save(customer);
+        Customer savedCustomer = jpa ? customerService.saveJpa(customer) : customerService.save(customer);
 
         if(savedCustomer != null){
             entity = new ResponseEntity("Id :- " + savedCustomer.getId(),HttpStatus.OK);
