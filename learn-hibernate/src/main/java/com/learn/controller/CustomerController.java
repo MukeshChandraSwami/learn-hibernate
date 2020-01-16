@@ -16,17 +16,18 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/consumer")
+@RequestMapping("/customer")
 public class CustomerController {
 
     @Autowired
     CustomerService customerService;
 
-    @GetMapping("/{id}/get")
-    public ResponseEntity get(@PathVariable (required = true, name = "id") long id){
+    @GetMapping("/{em}/{id}/get")
+    public ResponseEntity get(@PathVariable (required = false, name = "em") boolean em,
+            @PathVariable (required = true, name = "id") long id){
 
         ResponseEntity entity = null;
-        Optional<Customer> customerOp = customerService.getById(id);
+        Optional<Customer> customerOp = em ? customerService.getByEm(id) : customerService.getById(id);
         if(customerOp.isPresent()){
             entity = new ResponseEntity(customerOp.get(), HttpStatus.OK);
         } else {
@@ -35,12 +36,12 @@ public class CustomerController {
         return entity;
     }
 
-    @PostMapping("/{jpa}/save")
+    @PostMapping("/{em}/save")
     public ResponseEntity save(@RequestBody Customer customer,
-                               @PathVariable (required = false, name = "jpa") boolean jpa) {
+                               @PathVariable (required = false, name = "em") boolean em) {
         ResponseEntity entity;
 
-        Customer savedCustomer = jpa ? customerService.saveJpa(customer) : customerService.save(customer);
+        Customer savedCustomer = em ? customerService.saveByEm(customer) : customerService.save(customer);
 
         if(savedCustomer != null){
             entity = new ResponseEntity("Id :- " + savedCustomer.getId(),HttpStatus.OK);

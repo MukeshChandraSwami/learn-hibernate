@@ -3,6 +3,7 @@ package com.learn.service;
 import com.learn.entity.Customer;
 import com.learn.repo.CustomerRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -17,11 +18,9 @@ public class CustomerService {
     @Autowired
     CustomerRepo customerRepo;
 
-   //@Autowired
-   EntityManagerFactory factory;
-
-    /*@PersistenceContext
-    private EntityManager entityManager;*/
+    @Autowired
+    @Qualifier("entityManager")
+    private EntityManager entityManager;
 
     public Optional<Customer> getById(long id) {
         return customerRepo.findById(id);
@@ -37,12 +36,18 @@ public class CustomerService {
         return !getById(id).isPresent();
     }
 
-    public Customer saveJpa(Customer customer) {
-        EntityManager entityManager = factory.createEntityManager();
+    public Customer saveByEm(Customer customer) {
         EntityTransaction txn = entityManager.getTransaction();
         txn.begin();
         entityManager.persist(customer);
         txn.commit();
         return customer;
+    }
+
+    public Optional<Customer> getByEm(long id) {
+        EntityTransaction txn = entityManager.getTransaction();
+        txn.begin();
+        Customer customer = entityManager.find(Customer.class, id);
+        return Optional.of(customer);
     }
 }
