@@ -7,12 +7,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class CustomerService {
 
     @Autowired
@@ -48,6 +48,7 @@ public class CustomerService {
         EntityTransaction txn = entityManager.getTransaction();
         txn.begin();
         Customer customer = entityManager.find(Customer.class, id);
+        txn.commit();
         return Optional.of(customer);
     }
 }
