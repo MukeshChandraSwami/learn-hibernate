@@ -36,8 +36,7 @@ public class JpaConfig {
         LocalContainerEntityManagerFactoryBean lcemfb = new LocalContainerEntityManagerFactoryBean();
         lcemfb.setJpaVendorAdapter(getJpaVendorAdapter());
         lcemfb.setDataSource(getDataSource());
-       // lcemfb.setPersistenceUnitName(dataSource);
-        lcemfb.setPackagesToScan("com.learn");
+        lcemfb.setPackagesToScan("com.learn.entity", "com.learn.entity.nested");
         lcemfb.setJpaProperties(jpaProperties());
         lcemfb.afterPropertiesSet();
         return lcemfb.getObject();
@@ -77,6 +76,7 @@ public class JpaConfig {
         properties.put("hibernate.dialect", env.getProperty("hibernate.dialect"));
         properties.put("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
         properties.put("hibernate.format_sql", env.getProperty("hibernate.format_sql"));
+        properties.put("hibernate.hbm2ddl.auto",env.getProperty("hibernate.hbm2ddl.auto"));
         return properties;
     }
 }

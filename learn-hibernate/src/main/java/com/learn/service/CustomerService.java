@@ -40,6 +40,7 @@ public class CustomerService {
         EntityTransaction txn = entityManager.getTransaction();
         txn.begin();
         entityManager.persist(customer);
+        entityManager.flush();
         txn.commit();
         return customer;
     }
@@ -48,7 +49,24 @@ public class CustomerService {
         EntityTransaction txn = entityManager.getTransaction();
         txn.begin();
         Customer customer = entityManager.find(Customer.class, id);
+        entityManager.flush();
         txn.commit();
         return Optional.of(customer);
+    }
+
+    public Optional<Customer> getByQuery(Long id){
+        return Optional.of(customerRepo.getStudentByIdUsingQuery(entityManager, id));
+    }
+
+    public Optional<Customer> getByNamedQuery(long id){
+        return Optional.of(customerRepo.getByNamedQuery(entityManager,id));
+    }
+
+    public long countViaEM() {
+        return customerRepo.countViaEM(entityManager);
+    }
+
+    public long countViaQuery() {
+        return customerRepo.countViaQuery(entityManager);
     }
 }

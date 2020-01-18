@@ -36,6 +36,32 @@ public class CustomerController {
         return entity;
     }
 
+    @GetMapping("/query/{id}/get")
+    public ResponseEntity get(@PathVariable (required = true, name = "id") long id){
+
+        ResponseEntity entity = null;
+        Optional<Customer> customerOp = customerService.getByQuery(id);
+        if(customerOp.isPresent()){
+            entity = new ResponseEntity(customerOp.get(), HttpStatus.OK);
+        } else {
+            entity = new ResponseEntity(HttpStatus.NO_CONTENT);
+        }
+        return entity;
+    }
+
+    @GetMapping("/named/{id}/get")
+    public ResponseEntity getByNamedQuery(@PathVariable (required = true, name = "id") long id){
+
+        ResponseEntity entity = null;
+        Optional<Customer> customerOp = customerService.getByNamedQuery(id);
+        if(customerOp.isPresent()){
+            entity = new ResponseEntity(customerOp.get(), HttpStatus.OK);
+        } else {
+            entity = new ResponseEntity(HttpStatus.NO_CONTENT);
+        }
+        return entity;
+    }
+
     @PostMapping("/{em}/save")
     public ResponseEntity save(@RequestBody Customer customer,
                                @PathVariable (required = false, name = "em") boolean em) {
@@ -45,6 +71,21 @@ public class CustomerController {
 
         if(savedCustomer != null){
             entity = new ResponseEntity("Id :- " + savedCustomer.getId(),HttpStatus.OK);
+        } else {
+            entity = new ResponseEntity(HttpStatus.NO_CONTENT);
+        }
+
+        return entity;
+    }
+
+    @GetMapping("/{query}/count")
+    public ResponseEntity count(@PathVariable (required = true, name="query") boolean query){
+
+        ResponseEntity entity;
+        long counter = query ? customerService.countViaQuery() : customerService.countViaEM();
+
+        if(counter > 0) {
+            entity = new ResponseEntity("Total customers :- " + counter, HttpStatus.OK);
         } else {
             entity = new ResponseEntity(HttpStatus.NO_CONTENT);
         }

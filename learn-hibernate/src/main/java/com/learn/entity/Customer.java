@@ -3,6 +3,7 @@ package com.learn.entity;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.learn.enums.CustomerNamedQuery;
 import com.learn.enums.CustomerType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,6 +22,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -29,11 +32,14 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "customer_details")
+@Entity
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id")
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@NamedQueries(
+        @NamedQuery(name = CustomerNamedQuery.GET_BY_ID,query = "select c from Customer as c where c.id = :id")
+)
 public class Customer {
 
     @Id
