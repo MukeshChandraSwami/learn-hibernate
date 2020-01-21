@@ -15,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
 @Setter
@@ -31,6 +32,9 @@ public class Passport {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+
+    @Version
+    private int version;
 
     @NotNull
     @Column(name = "passport_number")

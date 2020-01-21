@@ -25,6 +25,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
+import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -45,6 +46,9 @@ public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+
+    @Version
+    private int version;
 
     @Column(name = "customer_name",nullable = false)
     private String name;
